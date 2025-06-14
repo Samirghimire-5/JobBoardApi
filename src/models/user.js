@@ -3,16 +3,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 module.exports = class User {
-  constructor(user) {
-    this.id = user.id;
-    this.name = user.name;
-    this.email = user.email;
-    this.password = user.password;
-    this.role = user.role || "job_seeker";
-    this.created_at = user.created_at || new Date();
-  }
+  // Uncomment the constructor if you want to create an instance function and initialize user properties
+  // constructor(user) {
+  //   this.id = user.id;
+  //   this.name = user.name;
+  //   this.email = user.email;
+  //   this.password = user.password;
+  //   this.role = user.role || "job_seeker";
+  // }
 
-  static async Register(user) {
+  static async register(user) {
     try {
       const { name, email, password, role } = user;
 
@@ -28,9 +28,11 @@ module.exports = class User {
         email,
         password: hashedPassword,
         role: role || "job_seeker",
-        created_at: new Date(),
       });
 
+      if (!newUser) {
+        return { status: 500, message: "Failed to register user" };
+      }
       // console.log("New user registered:", newUser);
 
       return { status: 201, message: "User registered successfully" };
@@ -40,7 +42,7 @@ module.exports = class User {
     }
   }
 
-  static async Login(credientials) {
+  static async login(credientials) {
     try {
       const { email, password } = credientials;
 
@@ -58,7 +60,7 @@ module.exports = class User {
         return { status: 401, message: "Invalid credentials" };
       }
 
-      const token = jwt.sign({ id: doesUserExist.id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: doesUserExist.id }, process.env.SECRET_KEY, {
         expiresIn: "7d",
       });
 

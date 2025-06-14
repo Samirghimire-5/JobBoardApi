@@ -9,8 +9,10 @@ app.use(bodyParser.json());
 
 // routes
 const userRoutes = require("./routes/user");
+const jobRoutes = require("./routes/job");
 
 app.use("/api", userRoutes);
+app.use("/api/jobs", jobRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

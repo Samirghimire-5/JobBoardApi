@@ -3,12 +3,14 @@ const User = require("../models/user");
 module.exports = {
   RegisterUser: async (req, res) => {
     try {
-      const response = await User.Register(req.body);
-      res.status(response.status).json({
+      const response = await User.register(req.body);
+      res.json({
+        status: response.status,
         message: response.message,
       });
     } catch (error) {
-      res.status(500).json({
+      res.json({
+        status: error.status || 500,
         message: error.message,
       });
     }
@@ -16,12 +18,15 @@ module.exports = {
 
   LoginUser: async (req, res) => {
     try {
-      const response = await User.LoginUser(req.body);
-      res.status(response.status).json({
+      const response = await User.login(req.body);
+      res.json({
+        status: response.status,
         message: response.message,
+        token: response.token,
       });
     } catch (error) {
-      res.status(500).json({
+      res.json({
+        status: error.status || 500,
         message: error.message,
       });
     }
